@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "475177757546",
+    "project_id": "guideme-528eb",
+    "storage_bucket": "guideme-528eb.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:475177757546:android:b8c5bf5517388c5a311313",
+        "android_client_info": {
+          "package_name": "com.example.guide_me"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDKbm1CmwjrnabqeS3eKdOHymsYv7NNIEY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
