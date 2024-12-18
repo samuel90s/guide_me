@@ -1,8 +1,9 @@
-import 'package:guide_me/Provider/favorite_provider.dart';
-import 'package:guide_me/view/place_detail_screen.dart';
 import 'package:another_carousel_pro/another_carousel_pro.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+
+import '../Provider/favorite_provider.dart';
+import '../view/place_detail_screen.dart';
 
 class DisplayPlace extends StatefulWidget {
   const DisplayPlace({super.key});

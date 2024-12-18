@@ -30,39 +30,37 @@ class Category {
     };
   }
 }
-
 final List<Category> categoriesList = [
   Category(
-    title: "Rooms",
-    image: "https://cdn-icons-png.flaticon.com/512/6192/6192020.png",
+    title: "Destinations",
+    image: "https://cdn-icons-png.flaticon.com/512/684/684908.png", // Location icon
   ),
   Category(
-    title: "Icons",
-    image: "https://cdn-icons-png.flaticon.com/512/734/734315.png",
+    title: "Accommodations",
+    image: "https://cdn-icons-png.flaticon.com/512/201/201514.png", // Hotel icon
   ),
   Category(
-    title: "Surfing",
-    image: "https://static.thenounproject.com/png/384446-200.png",
+    title: "Events",
+    image: "https://cdn-icons-png.flaticon.com/512/753/753252.png", // Calendar icon
   ),
   Category(
-    title: "Design",
-    image: "https://cdn-icons-png.freepik.com/512/48/48781.png",
+    title: "Transportation",
+    image: "https://cdn-icons-png.flaticon.com/512/2284/2284818.png", // Bus/Travel icon
   ),
   Category(
-    title: "Amazing views",
-    image: "https://static.thenounproject.com/png/5027454-200.png",
+    title: "Culinary",
+    image: "https://cdn-icons-png.flaticon.com/512/3075/3075977.png", // Food icon
   ),
   Category(
-    title: "New",
-    image: "https://www.iconpacks.net/icons/1/free-key-icon-920-thumb.png",
+    title: "Culture",
+    image: "https://cdn-icons-png.flaticon.com/512/4763/4763431.png", // Culture/Dance icon
   ),
   Category(
-    title: "Bed&breakfasts",
-    image:
-        "https://d1jj76g3lut4fe.cloudfront.net/processed/thumb/7u6sJOoAH6bp8v12g5.png?Expires=1695522574&Signature=J5jFmyAA3rmWw2JSbZbVtwYZohIGfqwBNZhgwqF4BHoW3QyJpe~b7CnD5EibDjVXe2u7nvjzpw6FBXr4ZriNZL4SYPtXNO6oVvsWl8noG73MAeEF~dd9ua2jAwqbqSeWuK~74UwHAy007o8Y~UFbOaI7DZg9fTESLv0MNhSLAWkZFN~ZVzuxt1~sF~eeHaWBAo-Nl-or8ysARgFeNQUvx6eqw8K-PVMR2IZsHFiSfXo~1CxzR6nKxBJW6eUuKWaH9t2S-hHqjQmMwKfGkhskDwCdLCuyuPghulKhjP12nEVH8A5S4lLy-3cNEYRt1l8LOC5U83hRqIsHFWR6EdAilQ__&Key-Pair-Id=K2YEDJLVZ3XRI",
+    title: "Activities",
+    image: "https://cdn-icons-png.flaticon.com/512/1177/1177831.png", // Sports/Outdoor activities icon
   ),
   Category(
-    title: "Houseboats",
-    image: "https://cdn-icons-png.freepik.com/512/98/98527.png",
+    title: "Shopping",
+    image: "https://cdn-icons-png.flaticon.com/512/3135/3135706.png", // Shopping bag icon
   ),
 ];

@@ -15,34 +15,46 @@ class Message {
     required this.duration,
   });
 }
+
 final List<Message> messages = [
   Message(
     image:
-        "https://www.momondo.in/himg/b1/a8/e3/revato-1172876-6930557-765128.jpg",
+        "https://cdn-2.tstatic.net/jatim/foto/bank/images/taman-impian-jaya-ancol_20170927_113949.jpg",
     vendorImage:
-        "https://images.ctfassets.net/h6goo9gw1hh6/2sNZtFAWOdP1lmQ33VwRN3/24e953b920a9cd0ff2e1d587742a2472/1-intro-photo-final.jpg?w=1200&h=992&fl=progressive&q=70&fm=jpg",
-    name: "Andrea",
-    date: "7/25/23",
-    description: "You: Airbnb update: Reservation of the",
-    duration: "Sep 24-28, 2024 Stockach",
+        "https://asset.kompas.com/crops/8BDPOecgdIsU0MxNoHIzA-b2D2M=/0x0:1000x667/750x500/data/photo/2022/08/04/62eb8501ecb51.jpg",
+    name: "Budi Santoso",
+    date: "25/08/2023",
+    description: "Pesan untuk Taman Impian Jaya Ancol sudah dikonfirmasi.",
+    duration: "Sep 5-8, 2024 Jakarta",
   ),
   Message(
     image:
-        "https://www.telegraph.co.uk/content/dam/Travel/hotels/2023/september/one-and-only-cape-town-product-image.jpg",
+        "https://asset.kompas.com/crops/QONmj-6iIIO8lMe9gKgn9fiFiKo=/0x0:780x520/780x520/data/photo/2021/03/23/6059d8aa46b60.jpg",
     vendorImage:
-        "https://www.perfocal.com/blog/content/images/size/w960/2021/01/Perfocal_17-11-2019_TYWFAQ_100_standard-3.jpg",
-    name: "Nikolaus",
-    date: "7/14/23",
-    description: "Airbnb update: Reminder - Leave about",
-    duration: "Jul 9-14, 2024, Konstanz",
+        "https://akcdn.detik.net.id/community/media/visual/2022/03/30/cool-and-handsome-man.jpg?w=700&q=90",
+    name: "Rahmat Hidayat",
+    date: "10/09/2023",
+    description: "Reservasi untuk Pantai Kuta telah dikonfirmasi.",
+    duration: "Oct 10-14, 2024 Bali",
   ),
   Message(
-    image: "https://www.theindiahotel.com/extra-images/banner-01.jpg",
+    image:
+        "https://images.unsplash.com/photo-1570415513507-c69145d1e8e1?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80",
     vendorImage:
-        "https://shotkit.com/wp-content/uploads/bb-plugin/cache/cool-profile-pic-matheus-ferrero-landscape-6cbeea07ce870fc53bedd94909941a4b-zybravgx2q47.jpeg",
-    name: "Manfred & Marcella",
-    date: "7/2/23",
-    description: "You: Airbnb update: Reservation of the",
-    duration: "Oct 2-7, 2024 Khajura",
+        "https://cdn1.katadata.co.id/media/images/thumb/2023/06/21/Pekerja-2023_06_21-17_35_41_8c9d52bba10a0d83bb877d2d7d3b8703.jpg",
+    name: "Siti Aisyah",
+    date: "15/10/2023",
+    description: "Pesanan Hotel di Bandung berhasil dibuat.",
+    duration: "Dec 15-19, 2024 Bandung",
+  ),
+  Message(
+    image:
+        "https://cdn.idntimes.com/content-images/post/20230223/202207171635-main-image-siska-rosdiana-nr-2ea6c013b8f1ad6431f3c130a79a82fb_600x400.jpg",
+    vendorImage:
+        "https://images.unsplash.com/photo-1542903660-eedba2cda473?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80",
+    name: "Ahmad Fauzi",
+    date: "22/11/2023",
+    description: "Tiket wisata ke Kawah Putih Ciwidey telah dikonfirmasi.",
+    duration: "Jan 2-6, 2025 Ciwidey",
   ),
 ];

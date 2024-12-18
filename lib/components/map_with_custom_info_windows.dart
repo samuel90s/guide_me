@@ -33,12 +33,13 @@ class _MapWithCustomInfoWindowsState extends State<MapWithCustomInfoWindows> {
 
   // for custom maker
   Future<void> _loadMarkers() async {
-    customIcon = await BitmapDescriptor.asset(
-      const ImageConfiguration(),
+    customIcon = await BitmapDescriptor.fromAssetImage(
+      const ImageConfiguration(
+        size: Size(40, 30), // Menentukan ukuran gambar
+      ),
       "asset/images/marker.png",
-      height: 40,
-      width: 30,
     );
+
     Size size = MediaQuery.of(context).size;
 
     placeCollection.snapshots().listen((QuerySnapshot streamSnapshot) {
