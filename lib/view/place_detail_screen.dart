@@ -146,21 +146,27 @@ class _PlaceDetailScreenState extends State<PlaceDetailScreen> {
   }
 
   Container priceAndReserve(Size size) {
-    return Container(
-      height: size.height * 0.1,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: Colors.black12),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Column(
+  return Container(
+    height: size.height * 0.1,
+    decoration: BoxDecoration(
+      color: Colors.white,
+      border: Border.all(color: Colors.black12),
+    ),
+    padding: const EdgeInsets.symmetric(horizontal: 20), // Tambahkan padding horizontal
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Expanded(
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               RichText(
                 text: TextSpan(
-                  text: "\$${widget.place['price']} ",
+                  text: "Rp. ${widget.place['price'].toString().replaceAllMapped(
+                    RegExp(r'(\d)(?=(\d{3})+(?!\d))'),
+                    (Match match) => '${match[1]},',
+                  )} ",
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
@@ -168,7 +174,7 @@ class _PlaceDetailScreenState extends State<PlaceDetailScreen> {
                   ),
                   children: const [
                     TextSpan(
-                      text: "night",
+                      text: "/malam",
                       style: TextStyle(
                         fontSize: 18,
                         color: Colors.black,
@@ -188,31 +194,31 @@ class _PlaceDetailScreenState extends State<PlaceDetailScreen> {
               )
             ],
           ),
-          SizedBox(
-            width: size.width * 0.3,
+        ),
+        SizedBox(width: size.width * 0.05), // Beri sedikit jarak horizontal di antara teks dan tombol
+        Container(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 25, // Ukuran padding tombol
+            vertical: 12,
           ),
-          Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 35,
-              vertical: 15,
-            ),
-            decoration: BoxDecoration(
-              color: Colors.pink,
-              borderRadius: BorderRadius.circular(15),
-            ),
-            child: const Text(
-              "Reserve",
-              style: TextStyle(
-                fontSize: 20,
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-              ),
+          decoration: BoxDecoration(
+            color: Colors.pink,
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: const Text(
+            "Reserve",
+            style: TextStyle(
+              fontSize: 18,
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
             ),
           ),
-        ],
-      ),
-    );
-  }
+        ),
+      ],
+    ),
+  );
+}
+
 
   Padding placePropertyList(Size size, image, title, subtitle) {
     return Padding(
@@ -360,68 +366,68 @@ class _PlaceDetailScreenState extends State<PlaceDetailScreen> {
   }
 
   Stack detailImageandIcon(Size size, BuildContext context, provider) {
-    return Stack(
-      children: [
-        SizedBox(
-          height: size.height * 0.35,
-          child: AnotherCarousel(
-            images: widget.place['imageUrls']
-                .map((url) => NetworkImage(url))
-                .toList(),
-            showIndicator: false,
-            dotBgColor: Colors.transparent,
-            onImageChange: (p0, p1) {
-              setState(() {
-                currentIndex = p1;
-              });
-            },
-            autoplay: true,
-            boxFit: BoxFit.cover,
+  return Stack(
+    children: [
+      SizedBox(
+        height: size.height * 0.35,
+        child: AnotherCarousel(
+          images: widget.place['imageUrls']
+              .map((url) => NetworkImage(url))
+              .toList(),
+          showIndicator: false,
+          dotBgColor: Colors.transparent,
+          onImageChange: (p0, p1) {
+            setState(() {
+              currentIndex = p1;
+            });
+          },
+          autoplay: true,
+          boxFit: BoxFit.cover,
+        ),
+      ),
+      Positioned(
+        bottom: 10,
+        right: 20,
+        child: Container(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 15,
+            vertical: 5,
+          ),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: Colors.black45,
+          ),
+          child: Text(
+            "${currentIndex + 1} / ${widget.place['imageUrls'].length}",
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
           ),
         ),
-        Positioned(
-          bottom: 10,
-          right: 20,
-          child: Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 15,
-              vertical: 5,
-            ),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10), color: Colors.black45),
-            child: Text(
-              "${currentIndex + 1} / ${widget.place['imageUrls'].length}",
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
+      ),
+      Positioned(
+        top: 35,
+        left: 20,
+        right: 20,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            // Back button
+            GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: const MyIconButton(
+                icon: Icons.arrow_back_ios_new,
               ),
             ),
-          ),
-        ),
-        Positioned(
-          right: 0,
-          left: 0,
-          top: 25,
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+            // Share and favorite buttons
+            Row(
               children: [
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: const MyIconButton(
-                    icon: Icons.arrow_back_ios_new,
-                  ),
-                ),
-                SizedBox(
-                  width: size.width * 0.55,
-                ),
                 const MyIconButton(icon: Icons.share_outlined),
-                const SizedBox(width: 20),
-                // after this all let's make favorite button function by using provider
+                const SizedBox(width: 10),
                 InkWell(
                   onTap: () {
                     provider.toggleFavorite(widget.place);
@@ -434,12 +440,14 @@ class _PlaceDetailScreenState extends State<PlaceDetailScreen> {
                         ? Colors.red
                         : Colors.black,
                   ),
-                )
+                ),
               ],
             ),
-          ),
+          ],
         ),
-      ],
-    );
-  }
+      ),
+    ],
+  );
+}
+
 }

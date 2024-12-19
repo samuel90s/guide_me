@@ -1,7 +1,6 @@
-import 'package:guide_me/Authentication/google_authentication.dart';
-import 'package:guide_me/view/main_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:guide_me/Authentication/google_authentication.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -11,6 +10,133 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  bool isLoading = false;
+
+  Future<void> signOutGoogle() async {
+    await FirebaseAuth.instance.signOut();
+    await FirebaseAuthServices().signOut();
+  }
+
+  Future<void> signInWithEmailPassword() async {
+    final emailController = TextEditingController();
+    final passwordController = TextEditingController();
+
+    await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Login with Email/Password"),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: emailController,
+              decoration: const InputDecoration(labelText: "Email"),
+            ),
+            TextField(
+              controller: passwordController,
+              decoration: const InputDecoration(labelText: "Password"),
+              obscureText: true,
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () async {
+              try {
+                await FirebaseAuth.instance.signInWithEmailAndPassword(
+                  email: emailController.text.trim(),
+                  password: passwordController.text.trim(),
+                );
+                Navigator.pop(context); // Close the dialog
+                Navigator.pushReplacementNamed(context, '/home');
+              } catch (e) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text("Login failed: ${e.toString()}")),
+                );
+              }
+            },
+            child: const Text("Login"),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context); // Close the dialog
+            },
+            child: const Text("Cancel"),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> signInWithPhone() async {
+    final phoneController = TextEditingController();
+    final otpController = TextEditingController();
+
+    await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Login with Phone Number"),
+        content: TextField(
+          controller: phoneController,
+          decoration: const InputDecoration(labelText: "Phone Number"),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () async {
+              Navigator.pop(context); // Close phone dialog
+              await FirebaseAuth.instance.verifyPhoneNumber(
+                phoneNumber: phoneController.text.trim(),
+                verificationCompleted: (PhoneAuthCredential credential) async {
+                  await FirebaseAuth.instance.signInWithCredential(credential);
+                  Navigator.pushReplacementNamed(context, '/home');
+                },
+                verificationFailed: (FirebaseAuthException e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("Verification failed: ${e.message}")),
+                  );
+                },
+                codeSent: (verificationId, resendToken) {
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: const Text("Enter OTP"),
+                      content: TextField(
+                        controller: otpController,
+                        decoration: const InputDecoration(labelText: "OTP"),
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () async {
+                            final credential = PhoneAuthProvider.credential(
+                              verificationId: verificationId,
+                              smsCode: otpController.text.trim(),
+                            );
+                            await FirebaseAuth.instance.signInWithCredential(credential);
+                            Navigator.pop(context); // Close OTP dialog
+                            Navigator.pushReplacementNamed(context, '/home');
+                          },
+                          child: const Text("Verify"),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+                codeAutoRetrievalTimeout: (verificationId) {},
+              );
+            },
+            child: const Text("Send OTP"),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context); // Close dialog
+            },
+            child: const Text("Cancel"),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -31,144 +157,75 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
               ),
-              const Divider(
-                color: Colors.black12,
-              ),
+              const Divider(color: Colors.black12),
               Padding(
                 padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
-                      "Welcome to Airbnb",
+                      "Welcome to Guide Me",
                       style: TextStyle(
                         fontSize: 25,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(
-                      height: size.height * 0.02,
-                    ),
-                    // for phone number field,
-                    phoneNumberField(size),
-                    const SizedBox(height: 10),
-                    RichText(
-                      text: const TextSpan(
-                        text:
-                            "We'll call or text you to conform your number. Standart message and data rates apply.  ",
-                        style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.black,
+                    SizedBox(height: size.height * 0.02),
+                    GestureDetector(
+                      onTap: signInWithPhone,
+                      child: Container(
+                        width: size.width,
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.pink,
                         ),
-                        children: [
-                          TextSpan(
-                            text: "Privacy Policy",
+                        child: const Center(
+                          child: Text(
+                            "Continue with Phone",
                             style: TextStyle(
+                              fontSize: 20,
                               fontWeight: FontWeight.bold,
-                              decoration: TextDecoration.underline,
+                              color: Colors.white,
                             ),
                           ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: size.height * 0.03),
-                    Container(
-                      width: size.width,
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.pink,
-                      ),
-                      child: const Center(
-                        child: Text(
-                          "Continue",
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
                         ),
                       ),
                     ),
-                    SizedBox(height: size.height * 0.026),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Container(
-                            height: 1,
-                            color: Colors.black26,
-                          ),
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 20),
-                          child: Text(
-                            "or",
-                            style: TextStyle(fontSize: 18),
-                          ),
-                        ),
-                        Expanded(
-                          child: Container(
-                            height: 1,
-                            color: Colors.black26,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: size.height * 0.015),
-                    socialIcons(
-                      size,
-                      Icons.facebook,
-                      "Continue with Facebook",
-                      Colors.blue,
-                      30,
-                    ),
-                    // now let's do the google authentication parts
-// add the sha1 and sha265 key
-// after you have enable google and  Email/Password sign in,
-// you need to re download the googlservice file in both the androi and ios device and replace the old file to new file ,
-                    // after this all android setup is completed but you need to add some line for iso
+                    SizedBox(height: size.height * 0.02),
                     InkWell(
                       onTap: () async {
-                        await FirebaseAuthServices().signInWithGoogle();
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const AppMainScreen(),
-                          ),
-                        );
+                        setState(() {
+                          isLoading = true;
+                        });
+                        try {
+                          await signOutGoogle();
+                          await FirebaseAuthServices().signInWithGoogle();
+                          if (mounted) {
+                            Navigator.pushReplacementNamed(context, '/home');
+                          }
+                        } catch (e) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text("Login failed: $e")),
+                          );
+                        } finally {
+                          setState(() {
+                            isLoading = false;
+                          });
+                        }
                       },
-                      child: socialIcons(
-                        size,
-                        FontAwesomeIcons.google,
-                        "Continue with Google",
-                        Colors.pink,
-                        27,
-                      ),
-                    ),
-                    socialIcons(
-                      size,
-                      Icons.apple,
-                      "Continue with Apple",
-                      Colors.black,
-                      30,
+                      child: isLoading
+                          ? const Center(child: CircularProgressIndicator())
+                          : socialIcons(size, Icons.email_outlined, "Continue with Google", Colors.red, 24),
                     ),
                     socialIcons(
                       size,
                       Icons.email_outlined,
-                      "Continue with email",
+                      "Continue with Email",
                       Colors.black,
-                      30,
+                      24,
+                      onTap: signInWithEmailPassword,
                     ),
-                    const SizedBox(height: 10),
-                    const Center(
-                      child: Text(
-                        "Need help?",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 17,
-                        ),
-                      ),
-                    )
                   ],
                 ),
               ),
@@ -179,101 +236,28 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Padding socialIcons(Size size, icon, name, color, double iconSize) {
+  Padding socialIcons(Size size, IconData icon, String name, Color color,
+      double iconSize, {VoidCallback? onTap}) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 15),
-      child: Container(
-        width: size.width,
-        padding: const EdgeInsets.symmetric(vertical: 11),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(),
-        ),
-        child: Row(
-          children: [
-            SizedBox(width: size.width * 0.05),
-            Icon(
-              icon,
-              color: color,
-              size: iconSize,
-            ),
-            SizedBox(width: size.width * 0.18),
-            Text(
-              name,
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            const SizedBox(width: 10),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Container phoneNumberField(Size size) {
-    return Container(
-      width: size.width,
-      height: 130,
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: Colors.black45,
-        ),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: const Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: EdgeInsets.only(
-              right: 10,
-              left: 10,
-              top: 8,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Country/Regin",
-                  style: TextStyle(
-                    color: Colors.black45,
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Indonesia(+62)",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 20,
-                      ),
-                    ),
-                    Icon(
-                      Icons.keyboard_arrow_down_sharp,
-                      size: 30,
-                    ),
-                  ],
-                )
-              ],
-            ),
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          width: size.width,
+          padding: const EdgeInsets.symmetric(vertical: 11),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(),
           ),
-          Divider(),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10),
-            child: TextField(
-              decoration: InputDecoration(
-                hintText: "Phone number",
-                hintStyle: TextStyle(
-                  fontSize: 18,
-                  color: Colors.black45,
-                ),
-                border: InputBorder.none,
-              ),
-            ),
+          child: Row(
+            children: [
+              SizedBox(width: size.width * 0.05),
+              Icon(icon, color: color, size: iconSize),
+              SizedBox(width: size.width * 0.1),
+              Text(name, style: const TextStyle(fontSize: 18)),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

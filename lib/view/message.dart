@@ -90,7 +90,13 @@ class _MessagesScreenState extends State<MessagesScreen> {
                 ),
               ),
               const SizedBox(height: 10),
-              ...messages.map((message) => _buildMessageItem(message)),
+              Expanded( // Pastikan konten di sini dapat menggulir jika penuh
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: messages.map((message) => _buildMessageItem(message)).toList(),
+                  ),
+                ),
+              ),
             ],
           ),
         ),
@@ -98,7 +104,6 @@ class _MessagesScreenState extends State<MessagesScreen> {
     );
   }
 
-  // Build message item UI
   Widget _buildMessageItem(Message message) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 20),
@@ -120,17 +125,30 @@ class _MessagesScreenState extends State<MessagesScreen> {
                 ),
               ),
               Positioned(
-                bottom: -10,
-                right: -18,
-                child: CircleAvatar(
-                  backgroundImage: NetworkImage(message.vendorImage),
-                  backgroundColor: Colors.white,
-                  radius: 25,
+                bottom: 0,
+                right: -10,
+                child: ClipOval(
+                  child: Container(
+                    width: 50,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.white,
+                        width: 2,
+                      ),
+                      shape: BoxShape.circle,
+                    ),
+                    child: CircleAvatar(
+                      backgroundImage: NetworkImage(message.vendorImage),
+                      backgroundColor: Colors.white,
+                      radius: 25,
+                    ),
+                  ),
                 ),
               ),
             ],
           ),
-          const SizedBox(width: 25),
+          const SizedBox(width: 20),
           Flexible(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -138,13 +156,17 @@ class _MessagesScreenState extends State<MessagesScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      message.name,
-                      style: const TextStyle(
-                        fontSize: 20,
-                        color: Colors.black54,
+                    Expanded(
+                      child: Text(
+                        message.name,
+                        style: const TextStyle(
+                          fontSize: 20,
+                          color: Colors.black54,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
                     ),
+                    const SizedBox(width: 10),
                     Text(
                       message.date,
                       style: const TextStyle(
@@ -154,6 +176,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
                     ),
                   ],
                 ),
+                const SizedBox(height: 5),
                 Text(
                   message.description,
                   maxLines: 1,

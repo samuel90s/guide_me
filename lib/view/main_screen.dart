@@ -13,82 +13,80 @@ class AppMainScreen extends StatefulWidget {
 
 class _AppMainScreenState extends State<AppMainScreen> {
   int selectedIndex = 0;
-  late final List<Widget> page;
+  late final PageController _pageController;
 
   @override
   void initState() {
-    page = [
-      const ExploreScreen(),
-      const Wishlists(),
-      const Scaffold(),
-      const MessagesScreen(),
-      const ProfilePage(),
-    ];
+    _pageController = PageController(initialPage: selectedIndex);
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  void onTabTapped(int index) {
+    setState(() {
+      selectedIndex = index;
+    });
+    _pageController.animateToPage(
+      index,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      body: PageView(
+        controller: _pageController,
+        physics: const NeverScrollableScrollPhysics(),
+        children: const [
+          ExploreScreen(),
+          Wishlists(),
+          Scaffold(), // Placeholder for Trip screen
+          MessagesScreen(),
+          ProfilePage(),
+        ],
+      ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.white,
         elevation: 5,
-        iconSize: 32,
+        iconSize: 28,
         selectedItemColor: Colors.pinkAccent,
         unselectedItemColor: Colors.black45,
         selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
         unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
         type: BottomNavigationBarType.fixed,
         currentIndex: selectedIndex,
-        onTap: (index) {
-          setState(() {
-            selectedIndex = index;
-          });
-        },
-        items: [
+        onTap: onTabTapped,
+        items: const [
           BottomNavigationBarItem(
-            icon: Image.network(
-              "https://cdn3.iconfinder.com/data/icons/feather-5/24/search-512.png",
-              height: 30,
-              color: selectedIndex == 0 ? Colors.pinkAccent : Colors.black45,
-            ),
+            icon: Icon(Icons.explore),
             label: "Explore",
           ),
           BottomNavigationBarItem(
-            icon: Icon(
-              Icons.favorite_border,
-              color: selectedIndex == 1 ? Colors.pinkAccent : Colors.black45,
-            ),
+            icon: Icon(Icons.favorite_border),
             label: "Wishlists",
           ),
           BottomNavigationBarItem(
-            icon: Image.network(
-              "https://cdn-icons-png.flaticon.com/512/2111/2111307.png",
-              height: 30,
-              color: selectedIndex == 2 ? Colors.pinkAccent : Colors.black45,
-            ),
+            icon: Icon(Icons.card_travel),
             label: "Trip",
           ),
           BottomNavigationBarItem(
-            icon: Image.network(
-              "https://static.vecteezy.com/system/resources/thumbnails/014/441/006/small_2x/chat-message-thin-line-icon-social-icon-set-png.png",
-              height: 30,
-              color: selectedIndex == 3 ? Colors.pinkAccent : Colors.black45,
-            ),
+            icon: Icon(Icons.message_outlined),
             label: "Message",
           ),
           BottomNavigationBarItem(
-            icon: Image.network(
-              "https://cdn-icons-png.flaticon.com/512/1144/1144760.png",
-              height: 30,
-              color: selectedIndex == 4 ? Colors.pinkAccent : Colors.black45,
-            ),
+            icon: Icon(Icons.person_outline),
             label: "Profile",
           ),
         ],
       ),
-      body: page[selectedIndex],
     );
   }
 }

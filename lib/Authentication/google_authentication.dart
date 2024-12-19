@@ -22,4 +22,6 @@ class FirebaseAuthServices {
       print(e.toString());
     }
   }
+
+  signOut() {}
 }

@@ -163,7 +163,10 @@ class _DisplayPlaceState extends State<DisplayPlace> {
                       SizedBox(height: size.height * 0.007),
                       RichText(
                         text: TextSpan(
-                          text: "\$${place['price']}",
+                          text: "Rp. ${place['price'].toString().replaceAllMapped(
+                            RegExp(r'(\d)(?=(\d{3})+(?!\d))'),
+                            (Match match) => '${match[1]},',
+                          )} ",
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.black,
@@ -171,7 +174,7 @@ class _DisplayPlaceState extends State<DisplayPlace> {
                           ),
                           children: const [
                             TextSpan(
-                              text: "night",
+                              text: "/night",
                               style: TextStyle(
                                 fontSize: 16,
                                 color: Colors.black,
@@ -181,6 +184,7 @@ class _DisplayPlaceState extends State<DisplayPlace> {
                           ],
                         ),
                       ),
+
                       SizedBox(height: size.height * 0.025),
                     ],
                   ),
